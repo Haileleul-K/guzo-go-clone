@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:logger/logger.dart';
 
 class HomePageController extends GetxController {
   var salseDropdownValue = 'This Weak'.obs;
@@ -25,23 +24,23 @@ class HomePageController extends GetxController {
   var classNames = ['Economy', 'Bussiness', 'First'].obs;
 
   var airports = [
-    ['Desse airport', 'Desse','DSS'],
-    ['Gonder airport', 'Gonder' , 'GDD'],
-    ['Gambella airport', 'Gambella' , 'GMB'],
+    ['Desse airport', 'Desse', 'DSS'],
+    ['Gonder airport', 'Gonder', 'GDD'],
+    ['Gambella airport', 'Gambella', 'GMB'],
     ['Mekele  airport', 'Mekele', 'MKL'],
-    ['Awassa airport', 'Awasa','AWS'],
-    ['Metu international airport', 'Metu','MTU'],
-    ['Addis ababa airport', 'Addis','ADD'],
+    ['Awassa airport', 'Awasa', 'AWS'],
+    ['Metu international airport', 'Metu', 'MTU'],
+    ['Addis ababa airport', 'Addis', 'ADD'],
   ].obs;
-var dipaCode = 'ADD'.obs;
-var dipaName = 'Addis'.obs;
-var dipaAirP = 'Addis ababa airport'.obs;
-var destCode = 'GDD'.obs;
-var destName = 'Gonder'.obs;
-var desAirP ='Gonder airport'.obs;
+  var dipaCode = 'ADD'.obs;
+  var dipaName = 'Addis'.obs;
+  var dipaAirP = 'Addis ababa airport'.obs;
+  var destCode = 'GDD'.obs;
+  var destName = 'Gonder'.obs;
+  var desAirP = 'Gonder airport'.obs;
 
-var isforFrom = false.obs;
-var isforTo = false.obs; 
+  var isforFrom = false.obs;
+  var isforTo = false.obs;
   var adultNo = 0.obs;
   var tinegeNo = 0.obs;
   var babyNo = 0.obs;
@@ -150,54 +149,76 @@ var isforTo = false.obs;
     ));
   }
 
+  void swapDestination() {
+    // Store the initial values in temporary variables
+    var tempName = destName.value;
+    var tempCode = destCode.value;
+    var tempAirP = desAirP.value;
+
+    // Update the original variables with the values from the destination
+    destName.value = dipaName.value;
+    destCode.value = dipaCode.value;
+    desAirP.value = dipaAirP.value;
+    dipaName.value = tempName;
+    dipaCode.value = tempCode;
+    dipaAirP.value = tempAirP;
+  }
+
   void airportDisplay() {
     Get.bottomSheet(Container(
-        height: Get.height*0.7,
+        height: Get.height * 0.7,
         color: AppColors.whiteColor,
         padding: EdgeInsets.only(top: Get.width * 0.09),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Padding(
-              padding:  EdgeInsets.symmetric(horizontal : 10.0),
+              padding: EdgeInsets.symmetric(horizontal: 10.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                Text('Select Airport',style: AppConstants.lightTextStyle(fontSize: 20).copyWith(fontWeight: FontWeight.bold),),
-                InkWell(
-                  onTap: () => Get.back(),
-                  child: Text('Cancel',style: AppConstants.boldTextStyle(fontSize: 20,color: AppColors.primaryAppColor),))
-              ],),
+                  Text(
+                    'Select Airport',
+                    style: AppConstants.lightTextStyle(fontSize: 20)
+                        .copyWith(fontWeight: FontWeight.bold),
+                  ),
+                  InkWell(
+                      onTap: () => Get.back(),
+                      child: Text(
+                        'Cancel',
+                        style: AppConstants.boldTextStyle(
+                            fontSize: 20, color: AppColors.primaryAppColor),
+                      ))
+                ],
+              ),
             ),
             SizedBox(
-              height: Get.height*0.47,
+              height: Get.height * 0.47,
               child: ListView.builder(
-             
                   itemCount: airports.value.length,
                   itemBuilder: ((context, index) {
                     return Padding(
-                      padding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+                      padding:
+                          EdgeInsets.symmetric(vertical: 15, horizontal: 15),
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           InkWell(
-    onTap: (){
-      if(isforFrom.value){
-        dipaAirP.value = airports[index][1];
-        dipaName.value = airports[index][0];
-        dipaCode.value = airports[index][2];
+                            onTap: () {
+                              if (isforFrom.value) {
+                                dipaAirP.value = airports[index][1];
+                                dipaName.value = airports[index][0];
+                                dipaCode.value = airports[index][2];
+                              } else if (isforTo.value) {
+                                desAirP.value = airports[index][1];
+                                destName.value = airports[index][0];
+                                destCode.value = airports[index][2];
+                              }
 
-      }
-      else if(isforTo.value){
-        desAirP.value = airports[index][1];
-        destName.value = airports[index][0];
-        destCode.value = airports[index][2];
-      }
-
-      isforFrom.value =false;
-      isforTo.value=false;
-      Get.back();
-    },
+                              isforFrom.value = false;
+                              isforTo.value = false;
+                              Get.back();
+                            },
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
@@ -212,13 +233,14 @@ var isforTo = false.obs;
                                   '${airports.value[index][0]}, ${airports.value[index][1]} ',
                                   overflow: TextOverflow.ellipsis,
                                   style: AppConstants.boldTextStyle(
-                                      fontSize: 16, color: AppColors.primaryAppColor),
+                                      fontSize: 16,
+                                      color: AppColors.primaryAppColor),
                                 ),
                               ],
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.only(left : 50.0),
+                            padding: const EdgeInsets.only(left: 50.0),
                             child: Divider(
                               thickness: 1,
                               color: AppColors.lightGrayText,
